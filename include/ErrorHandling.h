@@ -1,8 +1,7 @@
 #ifndef ERROR_HANDLING
 #define ERROR_HANDLING
 
-namespace ErrorHandling
-{
+namespace ErrorHandling {
     void ignoreLine();
     bool clearFailedExtraction();
     bool hasUnextractedInput();

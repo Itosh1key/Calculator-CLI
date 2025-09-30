@@ -1,6 +1,6 @@
-#include <cstdlib> // for std::exit
+#include <cstdlib>  // for std::exit
 #include <iostream> // for std::cin -- ignore(), eof(), clear(), peek()
-#include <limits> // for std::numeric_limits
+#include <limits>   // for std::numeric_limits
 
 namespace ErrorHandling {
     void ignoreLine()

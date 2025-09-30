@@ -1,91 +1,99 @@
-﻿// A simple calculator
+﻿// This calculator can perform basic arithmetic operations (+, -, *, /, and %) 
+// as well as additional operations, including exponentiation (POW), square root
+// extraction (SQRT), digit sum (DS), and digital root calculation (DR).
 
-#include "Arithmetic.h"
-#include "Calculator.h"
+#include "AdditionalArithmetic.h"
+#include "BasicArithmetic.h"
 #include "ErrorHandling.h"
+#include "UserInput.h"
 #include <iostream>
 #include <string>
 #include <string_view>
 
+// This namespace manages general program information.
 namespace AboutProgram {
-const std::string version { "0.1.0" };
+    constexpr std::string name { "Calculator" };
+    constexpr std::string version { "1.0.0" };
+    constexpr std::string author { "Itosh1key" };
 
-void print()
-{
-    std::cout
-        << "A simple calculator\n"
-        << "Version: " << version << '\n'
-        << "By Itoshikey\n\n";
-}
+    // This function prints the general information about the program.
+    void print()
+    {
+        std::cout << name << " v" << version
+                << "\nBy " << author << "\n";
+    }
 } // namespace AboutProgram
 
-double getValue(std::string_view sv)
+// Helper function.
+constexpr int selectOption()
 {
-    while (true) {
-        double value {};
-        std::cout << sv;
-        std::cin >> value;
+    using namespace std::string_view_literals;
+    constexpr std::array options { // Subject to change
+        "Basic Arithmetic (+, -, *, /, or %)"sv,
+        "Additional Arithmetic (POW, SQRT, DS, or DR)"sv,
+        "Quit"sv
+    };
 
-        if (ErrorHandling::clearFailedExtraction()) {
-            std::cout << "Error: Invalid input. Please try again\n";
-            continue;
-        }
+    int selection { UserInput::getSelection(options) };
 
-        ErrorHandling::ignoreLine();
-        return value;
-    }
+    return selection;
 }
 
-char getOperator()
+// This function performs basic arithmetic operations, such as
+// addition, subtraction, multiplication, division, and remainder (modulo).
+void calculateBasicArithmetic()
 {
-    while (true) {
-        char op {};
-        std::cout << "Enter an operation (+, -, *, /, or %): ";
-        std::cin >> op;
+    BasicArithmetic calculate {
+        UserInput::getValue("\nEnter a number: "),
+        UserInput::getOperator(),
+        UserInput::getValue("Enter another number: ")
+    };
 
-        if (!ErrorHandling::clearFailedExtraction())
-            ErrorHandling::ignoreLine();
-
-        switch (op) {
-        case '+':
-        case '-':
-        case '*':
-        case '/':
-        case '%':
-            return op;
-        default:
-            std::cerr << "That was an invalid input. Try again.\n";
-        }
+    while ((calculate.getOp() == '/') && (calculate.getY() == 0.0)) {
+        std::cout << "The denominator cannot be zero. Try again.\n";
+        calculate.setY(UserInput::getValue("Enter another number: "));
     }
+
+    calculate.printResult();
 }
 
-
-
-void printResult(Calculator& c)
+// This function performs additional arithmetic operations, including
+// exponentiation, taking the square root, calculating the digit sum, and 
+// finding the digital root.
+void calculateAdditionalArithmetic()
 {
-    auto fcn { ArithmetcFunctions::getArithmeticFunction(c.getOp()) };
+    AdditionalArithmetic calculate { UserInput::getValue("\nEnter a number: ") };
 
-    std::cout 
-            << c.getX() << ' ' << c.getOp() << ' ' << c.getY() 
-            << " = " << fcn(c.getX(), c.getY()) << '\n';
+    calculate.printResult();
 }
 
 int main()
 {
     AboutProgram::print();
 
-    Calculator calculation {
-        getValue("Enter a number: "),
-        getOperator(),
-        getValue("Enter another number: ")
-    };
+    // A flag that will be used to break out of the loop
+    bool breakOut { false };
 
-    while ((calculation.getOp() == '/') && (calculation.getY() == 0.0)) {
-        std::cout << "The denominator cannot be zero. Try again.\n";
-        calculation.setY(getValue("Enter another number: "));
-    }
+    /* We could have used a goto statement instead, but that goes
+        against the best practices. We don't want to create spaghetti code. */
 
-    printResult(calculation);
+    do {
+        switch (selectOption()) {
+        case 1:
+            calculateBasicArithmetic();
+            break;
+        case 2:
+            calculateAdditionalArithmetic();
+            break;
+        case 3: // If the user has chosen the option "Quit"
+            breakOut = true; // activate the flag
+            break;
+        }
 
-    return 0;
+        if (breakOut) // If the flag is active
+            break; // break out of the loop
+
+    } while (!UserInput::finishedCalculations());
+
+    std::cout << "\nBye!\n";
 }

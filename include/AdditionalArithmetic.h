@@ -1,5 +1,5 @@
-#ifndef ADVANCED_MATH_H
-#define ADVANCED_MATH_H
+#ifndef ADDITIONAL_ARITHMETIC_H
+#define ADDITIONAL_ARITHMETIC_H
 
 #include "ErrorHandling.h"
 #include "Math.h"

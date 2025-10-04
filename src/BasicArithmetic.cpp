@@ -33,9 +33,13 @@ constexpr double BasicArithmetic::divide(double x, double y)
 }
 
 // This function returns the remainder of a division.
-constexpr int BasicArithmetic::modulo(double x, double y)
+constexpr std::int64_t BasicArithmetic::modulo(double x, double y)
 {
-    return static_cast<int>(x) % static_cast<int>(y);
+    if (y == 0.0)
+        throw std::runtime_error { "Division by 0" };
+
+    return static_cast<std::int64_t>(x) % 
+           static_cast<std::int64_t>(y);
 }
 
 using BasicArithmeticFunction = std::function<double(double, double)>;

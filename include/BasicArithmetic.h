@@ -2,6 +2,7 @@
 #define ARITHMETIC_H
 
 #include "Math.h"
+#include <cstdint> // for fixed_sized integers
 #include <exception>  // for std::exception
 #include <functional> // for std::function
 #include <iostream>
@@ -15,7 +16,7 @@ struct BasicArithmetic : public Math {
     static constexpr double subtract(double x, double y);
     static constexpr double multiply(double x, double y);
     static constexpr double divide(double x, double y);
-    static constexpr int modulo(double x, double y);
+    static constexpr std::int64_t modulo(double x, double y);
 
     using BasicArithmeticFunction = std::function<double(double, double)>;
     BasicArithmeticFunction getBasicArithmeticFunction(char op) const;

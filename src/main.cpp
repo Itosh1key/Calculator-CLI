@@ -49,7 +49,8 @@ void calculateBasicArithmetic()
         UserInput::getValue("Enter another number: ")
     };
 
-    while ((calculate.getOp() == '/') && (calculate.getY() == 0.0)) {
+    while (((calculate.getOp() == '/') && (calculate.getY() == 0.0)) ||
+           ((calculate.getOp() == '%') && (calculate.getY() == 0.0))) {
         std::cout << "The denominator cannot be zero. Try again.\n";
         calculate.setY(UserInput::getValue("Enter another number: "));
     }
